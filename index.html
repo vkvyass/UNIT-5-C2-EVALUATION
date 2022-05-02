@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Weather Forcaster</title>
+        <style>
+            body{
+                margin-top: 5%;
+                background-color: grey;
+            }
+            #cityData{
+                background-color: rgb(173, 173, 173);
+                height: auto;
+                width: 40%;
+                box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+                margin: auto;
+                padding: 1%;
+                text-align: center;
+            }
+            #cityData>h1{
+                color: red;
+                text-decoration: underline;
+            }
+            #searchBar{
+                text-align: center;
+                margin: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="searchBar">
+            <input type="text" id="city" placeholder="Search City Here">
+            <button onclick="getWeatherData()">SEARCH</button>
+            <br> <br>
+        </div>
+        <div id="container"></div>
+    </body>
+    <script>
+        let container = document.getElementById('container')
+        let API_key = '4e0e3a41788cfc136a831471d99d763a';
+        async function getWeatherData(){
+            let city = document.getElementById('city').value;
+
+            let res = await fetch((`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_key}`));
+
+            let data = await res.json();
+
+            // console.log(data)
+            displayWeather(data)
+        }
+        //data to be printed atleast => temp, pressure, humidity, wind speed, sunrise, sunset, weather description
+        function displayWeather(data){
+            let weatherCard = document.createElement('div');
+            weatherCard.id= 'cityData'
+
+            let name = document.createElement('h1');
+            name.textContent=data.name;
+
+            let temperature = document.createElement('p');
+            temperature.textContent= 'Temperature : '+ data.main.temp;
+
+            let pressure = document.createElement('p');
+            pressure.textContent='Pressure : '+ data.main.pressure;
+
+            let humidity = document.createElement('p');
+            humidity.textContent='Humidity : '+ data.main.humidity;
+
+            let windSpeed = document.createElement('p');
+            windSpeed.textContent='Wind Speed : '+ data.wind.speed;
+
+            let sunrise = document.createElement('p');
+            sunrise.textContent='Sunrise : '+ data.sys.sunrise;
+
+            let sunset = document.createElement('p');
+            sunset.textContent='Sunset : '+ data.sys.sunset;
+
+            let weatherDescription = document.createElement('p');
+            weatherDescription.textContent='Weather Description : '+ data.weather.description;
+
+            weatherCard.append(name,temperature,pressure,humidity,windSpeed,sunrise,sunset,weatherDescription);
+            container.append(weatherCard);
+        }
+    </script>
+</html>
